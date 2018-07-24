@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OlaMundo", "OlaMundo\OlaMundo.csproj", "{E1F88645-87D9-4A26-BE73-839471F6D15B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibliotecaString", "BibliotecaString\BibliotecaString.csproj", "{A513A393-CFB8-46AB-96C8-AE88B7580FC1}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1F88645-87D9-4A26-BE73-839471F6D15B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1F88645-87D9-4A26-BE73-839471F6D15B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1F88645-87D9-4A26-BE73-839471F6D15B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1F88645-87D9-4A26-BE73-839471F6D15B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A513A393-CFB8-46AB-96C8-AE88B7580FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A513A393-CFB8-46AB-96C8-AE88B7580FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A513A393-CFB8-46AB-96C8-AE88B7580FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A513A393-CFB8-46AB-96C8-AE88B7580FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
