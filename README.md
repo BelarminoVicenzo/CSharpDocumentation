@@ -76,3 +76,88 @@ assinatura de métodos.
 
 Uma classe abstrata apesar de não poder ser instanciada, pode ter um ou mais construtores, uma vez que esses
 construtores podem ser chamados por suas classes derivadas
+
+## Adição de dependências em projetos distintos
+
+O aplicativo console OlaMundo, consome uma função programada na *class library* (biblioteca de funções) 
+BibliotecaString. Para fazer uso da função:
+
+- Adicionamos o **PROJETO** *BibliotecaString* a lista de dependencias do projeto *OlaMundo* clicando com o botão
+  direito do mouse sobre Dependencies
+
+- Fazemos uso do **NAMESPACE** da classe *UteisString* através do comando `@using UteisString`
+
+- Chamamos a **FUNÇÃO** especificando a sua classe container dentro do namespace : 
+  `UteisString.ComecaComMaiuscula` 
+
+# Interpolação de strings
+
+É possível formatar a exibição de um dado em uma string interpolada adicionado dois pontos ":" após a expressão
+interpolada:
+
+```
+string item = "berinjela";
+DateTime data = DateTime.Now;
+decimal preco = 1.99m;
+string unidade = "kg";
+
+Console.WriteLine($"Em {data:d}, o preço da {item} é {preco:C2} por {unidade}.");
+```
+
+Para fixar o tamanho da saída de uma expressão interpolada, utilize a vírgula "," após a expressão interpolada
+e designe a largura do campo. 
+
+```
+string nomeItem = "bola";
+
+Console.WriteLine($"*{nomeItem,6}"); // Resulta em *  bola	
+Console.WriteLine($"{nomeItem,-6}*"); // Result em bola  *
+``` 
+
+É possível combinar um especificador de alinhamento e de formato em uma única expressão interpolada. Para fazer 
+isso, especifique o alinhamento primeiro, seguido por dois-pontos e pela cadeia de caracteres de formato: 
+
+``` 
+decimal precoItem = 2.9m;
+
+Console.WriteLine($"*{precoItem,7:C2}"); //Resulta em *  $2.90
+Console.WriteLine($"{precoItem,-7:C2}*");//Resulta em $2.90  *
+``` 
+
+## Listas genéricas
+
+Você especifica o tipo do dado armazenado na lista entre os símbolos maior e menor `List<string>`
+
+É possível acessar um item da lista individualmente através do seu índice 
+
+``` 
+var nomes = new List<string> {"José", "João", "Maria"};
+
+Console.WriteLine(nomes[2]);
+``` 
+
+## Classes
+
+O operador `new AlgumaClasse()` transmite a ideia de um novo objeto, por exemplo a abertura de uma *nova* conta
+bancária. Quando um cliente vai a um banco para abrir uma nova conta bancária, esta deve conter os dados do seu
+titular, bem como um saldo inicial. Isso denota o comportamento de um construtor, que em termos práticos de 
+programação seria:
+
+```
+public class ContaBancaria 
+{
+	public string Titular { get; set; }
+	public decimal Saldo { get; set; }
+}
+
+//Abrindo uma nova conta
+var novaConta = new ContaBancaria("João da Silva", 0.0m);
+```
+
+Construtores são usados para inicializar objetos desse tipo de classe, eles são chamados quando você cria um 
+objeto usando `new`. 
+
+# Observações gerais importantes
+
+Os métodos que manipulam cadeias de caracteres (strings) retornam novos objetos string, em vez de fazer 
+modificações no objeto local.

@@ -14,9 +14,7 @@ namespace OlaMundo
             Console.WriteLine($"\nOlá {nome}, em {data:d} às {data:t}!");
             Console.WriteLine($"Seu nome {(!UteisString.IniciaComMaiuscula(nome) ? "não" : "") } inicia com maiúscula");
 
-            Console.Write("\nPressione alguma tecla para sair...");
-
-            
+            Console.Write("\nPressione alguma tecla para sair...");            
 
             Console.ReadKey(true);            
         }
