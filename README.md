@@ -136,6 +136,13 @@ var nomes = new List<string> {"José", "João", "Maria"};
 Console.WriteLine(nomes[2]);
 ``` 
 
+## Namespaces
+
+O C# usa namespaces para organizar tipos; namespaces são como pastas virtuais ou lógicas, onde as classes/tipos
+são organizados.
+
+Observe que o namespace padrão da aplicação é baseado no diretório físico onde a mesma se encontra.
+
 ## Classes
 
 O operador `new AlgumaClasse()` transmite a ideia de um novo objeto, por exemplo a abertura de uma *nova* conta
