@@ -9,16 +9,20 @@ namespace Teleprompt
     {
         static void Main(string[] args)
         {
-            IEnumerable<string> linhas = LerArquivo("sampleQuotes.txt");
+            ExibirTexto().Wait(); 
+        }
 
-            foreach (string linha in linhas)
+        private static async Task ExibirTexto()
+        {
+            IEnumerable<string> palavras = LerArquivo("sampleQuotes.txt");
+
+            foreach (string palavra in palavras)
             {
-                Console.WriteLine(linha);
+                Console.WriteLine(palavra);
 
-                if (!string.IsNullOrEmpty(linha))
+                if (!string.IsNullOrEmpty(palavra))
                 {
-                    var pausa = Task.Delay(50);
-                    pausa.Wait();
+                    await Task.Delay(50);
                 }
             }
         }

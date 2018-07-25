@@ -164,6 +164,15 @@ var novaConta = new ContaBancaria("João da Silva", 0.0m);
 Construtores são usados para inicializar objetos desse tipo de classe, eles são chamados quando você cria um 
 objeto usando `new`. 
 
+# Programação assíncrona
+
+Apesar de retornar uma `Task`, um método assíncrono não faz uso de `return Task`. Em vez disso, esse objeto `Task`
+é criado pelo código gerado pelo compilador quando você usa o operador `await`.
+
+Você pode imaginar que esse método retorna quando atinge um `await`, porém a task retornada indica que o trabalho
+não foi concluído, que ainda está em andamento. O método será retomado quando a tarefa em espera for concluída. 
+Após a execução completa, a task retornada indicará a conclusão.
+
 # Observações gerais importantes
 
 Os métodos que manipulam cadeias de caracteres (strings) retornam novos objetos string, em vez de fazer 
