@@ -173,6 +173,11 @@ Você pode imaginar que esse método retorna quando atinge um `await`, porém a 
 não foi concluído, que ainda está em andamento. O método será retomado quando a tarefa em espera for concluída. 
 Após a execução completa, a task retornada indicará a conclusão.
 
+# Fazendo solicitações da Web
+
+Para fazer solicitações da Web usamos a classe `HttpClient`, um objeto dessa classe manipula a solicitação e as
+respostas
+
 # Observações gerais importantes
 
 Os métodos que manipulam cadeias de caracteres (strings) retornam novos objetos string, em vez de fazer 
