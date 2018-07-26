@@ -2,7 +2,126 @@
 
 Exemplos da documentação do C# disponibilizada em https://docs.microsoft.com/pt-br/dotnet/csharp/
 
-## Introdução
+# Estrutura de um programa C#
+
+Os principais conceitos organizacionais em C# são programas, namespaces, tipos, membros e assemblies.
+
+Tipos estão contidos em namespaces; classes e interfaces são exemplos de tipos; campos, métodos, propriedades e 
+eventos são exemplos de membros. 
+
+Quando os programas em C# são compilados, eles são empacotados fisicamente em assemblies que normalmente têm a 
+extensão de arquivo .exe (aplicativos) ou .dll (bibliotecas).
+
+## Compilação
+
+O C# permite que o texto de origem (código fonte) de um programa seja armazenado em vários arquivos de origem
+(arquivos .cs). Quando um programa em C# que possui vários arquivo é compilado, todos os arquivos de origem são 
+processados juntos, é como se todos os arquivos de origem fossem concatenados em um arquivo grande antes de serem
+processados.
+
+## Classes
+
+Uma classe é uma estrutura que combina ações (métodos) e estado (campos/propriedades) em uma única unidade, ela
+fornece uma definição para instâncias da classe criadas dinamicamente, também conhecidas como objetos.
+
+# Membros de classes
+
+Os membros de uma classe podem ser estáticos ou de instância. 
+
+>Os membros **estáticos pertencem às classes** e os membros de **instância pertencem aos objetos** (instâncias das classes).
+
+### Acessibilidade/Visibilidade de membros
+
+- `private`: visíveis apenas para a classe base e para classes derivadas aninhadas na mesma
+- `protected`: visíveis apenas para classes derivadas
+- `internal`: visíveis apenas para classe derivadas dentro do mesmo assembly da classe base
+
+### Parâmetros de tipo
+
+Uma classe pode especificar um conjunto de parâmetros de tipo (o nome da classe com colchetes angulares e uma 
+lista de nomes de parâmetros de tipo separados por vírgulas) `public class Par<TPrimeiro,TSegundo>`. Os parâmetros 
+podem ser usados no corpo da classe.
+
+Um tipo de classe que é declarado para pegar parâmetros de tipo é chamado de *tipo de classe genérica*.
+
+### Campos
+
+Um campo é uma variável que está associada a estrutura de uma classe. Um campo declarado sem o modificador 
+`static` define um campo de instância. Cada instância da classe terá cópia separada desse campo.
+
+No caso de **campos estáticos**, não importa quantas instâncias da classe são criadas, sempre **haverá apenas 
+uma cópia do campo** compartilhado entre todas as instâncias, pois este percente a classe e não a instancia da 
+classe (objeto).
+
+Campos `readonly` (somente leitura) só podem ser alterados na parte da declaração do campo ou no construtor da 
+classe.
+
+### Métodos
+
+Métodos estáticos podem acessar diretamente apenas membros estáticos, métodos de instância podem acessar membros
+estáticos e de instância. Observe o projeto *MetodosEstaticosInstancia* para ver o recurso na prática.
+
+### A palavra reservada this
+
+A instância em que um método de instância foi invocado pode ser explicitamente acessada como `this`. É um erro se
+referir a `this` em um método estático.
+
+## Herança
+
+Herança é um recurso das linguagens de programação orientadas a objeto que permite a definição de uma classe 
+base (classe pai) que fornece funcionalidades (dados e comportamento) a classes derivadas (classes filhas) que 
+herdam (reutiliza), estendem ou modificam tais funcionalidades.
+
+A classe cujos membros são herdados é chamada de classe base. A classe que herda os membros da classe base é 
+chamada de classe derivada.
+
+A herança de classes expressa o relacionamento "é um" entre uma classe base e suas classes derivadas. Já a 
+implementação múltipla de interfaces expressam o relacionamento "pode fazer", pois a interface define um conjunto
+mínimo de funcionalidades.
+
+*Herança implícita* denota o fato de que todas as classes no .Net herdam da classe base `Object` ou de algum tipo
+derivado dele
+
+### virtual
+
+Para permitir a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `virtual` no
+método da classe base, muito utilizado quando queremos substituir a implementação de um método na classe base. A
+palavra override deve ser utilizada na classe derivada. É uma abordagem para evitar redefinições acidentais. É
+possível chamar o conteúdo do método na classe base através da palavra chave `base`
+
+Para obrigar a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `abstract` no
+método da classe base.
+
+### Classes abstratas
+
+São classes que servem apenas de modelo para classes que herdarão dela. Ela possui propriedades e apenas a 
+assinatura de métodos.
+
+Uma classe abstrata apesar de não poder ser instanciada, pode ter um ou mais construtores, uma vez que esses
+construtores podem ser chamados por suas classes derivadas
+
+# Instâncias de classes
+
+O operador `new AlgumaClasse()` transmite a ideia de um novo objeto, por exemplo a abertura de uma *nova* conta
+bancária. Quando um cliente vai a um banco para abrir uma nova conta bancária, esta deve conter os dados do seu
+titular, bem como um saldo inicial. Isso denota o comportamento de um construtor, que em termos práticos de 
+programação seria:
+
+```
+public class ContaBancaria 
+{
+	public string Titular { get; set; }
+	public decimal Saldo { get; set; }
+}
+
+//Abrindo uma nova conta
+var novaConta = new ContaBancaria("João da Silva", 0.0m);
+```
+
+Construtores são usados para inicializar objetos desse tipo de classe, eles são chamados quando você cria um 
+objeto usando `new`. 
+
+## Aplicativo Console
 
 O Visual Studio usa um modelo de aplicativo para criar seu projeto. O modelo de aplicativo Console define
 automaticamente uma classe `Program` que contém um único método `Main` que usa um array de string como um
@@ -42,40 +161,6 @@ A instrução `using` nesse método gerencia a limpeza de recursos. A variável 
 deve ser chamado quando o recurso for liberado. O compilador gera essa chamada quando a execução atingir a chave
 de fechamento da instrução `using`. O código gerado pelo compilador garante que o recurso seja liberado, mesmo se
 uma exceção for lançada do código no bloco definido pela instrução `using`.
-
-## Herança
-
-A herança de classes expressa o relacionamento "é um" entre uma classe base e suas classes derivadas. Já a 
-implementação múltipla de interfaces expressam o relacionamento "pode fazer", pois a interface define um conjunto
-mínimo de funcionalidades.
-
-*Herança implícita* denota o fato de que todas as classes no .Net herdam da classe base `Object` ou de algum tipo
-derivado dele
-
-
-### Visibilidade de membros
-
-- `private`: visíveis apenas para a classe base e para classes derivadas aninhadas na mesma
-- `protected`: visíveis apenas para classes derivadas
-- `internal`: visíveis apenas para classe derivadas dentro do mesmo assembly da classe base
-
-### virtual
-
-Para permitir a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `virtual` no
-método da classe base, muito utilizado quando queremos substituir a implementação de um método na classe base. A
-palavra override deve ser utilizada na classe derivada. É uma abordagem para evitar redefinições acidentais. É
-possível chamar o conteúdo do método na classe base através da palavra chave `base`
-
-Para obrigar a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `abstract` no
-método da classe base.
-
-### Classes abstratas
-
-São classes que servem apenas de modelo para classes que herdarão dela. Ela possui propriedades e apenas a 
-assinatura de métodos.
-
-Uma classe abstrata apesar de não poder ser instanciada, pode ter um ou mais construtores, uma vez que esses
-construtores podem ser chamados por suas classes derivadas
 
 ## Adição de dependências em projetos distintos
 
@@ -124,6 +209,17 @@ Console.WriteLine($"*{precoItem,7:C2}"); //Resulta em *  $2.90
 Console.WriteLine($"{precoItem,-7:C2}*");//Resulta em $2.90  *
 ``` 
 
+Para usar caracteres de escape em strings interpoladas faça o seguinte:
+
+- Para obter `{` informe `{{`
+- Para obter `\`informe `\\`
+- Para obter literalmente um string interpolada utilize `$@"expressao_interpolada"`. Nesse caso, os caracteres de 
+  escape serão tratados como literais
+
+Como os dois-pontos (:) têm um significado especial em um item com uma expressão interpolada, para usar um 
+operador condicional ternario em uma expressão, coloque-a entre parênteses: 
+`$"Você (Idade > 18 : "não", "") é maior de idade"`
+
 ## Listas genéricas
 
 Você especifica o tipo do dado armazenado na lista entre os símbolos maior e menor `List<string>`
@@ -143,27 +239,6 @@ são organizados.
 
 Observe que o namespace padrão da aplicação é baseado no diretório físico onde a mesma se encontra.
 
-## Classes
-
-O operador `new AlgumaClasse()` transmite a ideia de um novo objeto, por exemplo a abertura de uma *nova* conta
-bancária. Quando um cliente vai a um banco para abrir uma nova conta bancária, esta deve conter os dados do seu
-titular, bem como um saldo inicial. Isso denota o comportamento de um construtor, que em termos práticos de 
-programação seria:
-
-```
-public class ContaBancaria 
-{
-	public string Titular { get; set; }
-	public decimal Saldo { get; set; }
-}
-
-//Abrindo uma nova conta
-var novaConta = new ContaBancaria("João da Silva", 0.0m);
-```
-
-Construtores são usados para inicializar objetos desse tipo de classe, eles são chamados quando você cria um 
-objeto usando `new`. 
-
 # Programação assíncrona
 
 Apesar de retornar uma `Task`, um método assíncrono não faz uso de `return Task`. Em vez disso, esse objeto `Task`
@@ -182,3 +257,15 @@ respostas
 
 Os métodos que manipulam cadeias de caracteres (strings) retornam novos objetos string, em vez de fazer 
 modificações no objeto local.
+
+# Atributos
+
+Atributos fornecem uma maneira de associar informações ao código de forma declarativa, também fornecem um 
+elemento reutilizável que pode ser aplicado a uma variedade de destinos: classes, structs, métodos, construtores 
+e muito mais. As marcações de atributos são fáceis de identificar, pois sempre estão entre colchetes: `[Atributo]`
+
+No C#, os atributos são classes que herdam da classe base Attribute. 
+
+# Reflexão
+
+A ideia básica de Reflexão é que você escreva um código que examine outro código.
