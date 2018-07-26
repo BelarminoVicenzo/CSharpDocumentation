@@ -19,6 +19,15 @@ O C# permite que o texto de origem (código fonte) de um programa seja armazenad
 processados juntos, é como se todos os arquivos de origem fossem concatenados em um arquivo grande antes de serem
 processados.
 
+## Tipos de referência e tipos de valor
+
+Há dois tipos em C#: tipos de referência e tipos de valor. As variáveis de tipos de valor contêm diretamente seus
+dados enquanto variáveis de tipos de referência armazenam referências a seus dados (objetos). Com tipos de 
+referência, é possível que duas variáveis referenciem o mesmo objeto e, portanto, é possível que operações em uma
+variável afetem o objeto referenciado por outra variável. Com tipos de valor, cada variável tem sua própria cópia
+dos dados e não é possível que operações em uma variável afetem a outra (exceto no caso de variáveis de 
+parâmetros `ref` e `out`).
+
 ## Classes
 
 Uma classe é uma estrutura que combina ações (métodos) e estado (campos/propriedades) em uma única unidade, ela
@@ -130,6 +139,104 @@ var novaConta = new ContaBancaria("João da Silva", 0.0m);
 
 Construtores são usados para inicializar objetos desse tipo de classe, eles são chamados quando você cria um 
 objeto usando `new`. 
+
+### Construtores
+
+Um construtor é declarado como um método sem nenhum tipo de retorno e o mesmo nome da classe que o contém.
+
+Construtores de instância podem ser sobrecarregados, são invocados usando o operador `new` e não são herdados.
+
+O C# dá suporte aos construtores estáticos e de instância. Um construtor de instância é um membro que implementa 
+as ações necessárias para inicializar uma instância de uma classe. Um construtor estático é um membro que 
+implementa as ações necessárias para inicializar uma classe quando ele for carregado pela primeira vez.
+
+### Propriedades
+
+As propriedades são uma extensão natural dos campos, diferentemente destes, as propriedades não denotam locais de
+armazenamento, por isso elas têm acessadores que especificam as instruções a serem executadas quando os valores 
+forem lidos ou gravados.
+
+Uma propriedade é declarada como um campo, exceto quando a declaração termina com um acessador `get` e/ou um 
+acessador `set` gravado entre os delimitadores { e } em vez de terminar com um ponto-e-vírgula `{ get; set; }`.
+
+### Eventos
+Um evento é um membro que permite que uma classe ou objeto forneça notificações. Um evento é declarado como um 
+campo com a palavra chave `event` e seu tipo deverá ser um `delegate`.
+
+### Delegates
+
+Um Delegate representa referências a métodos, possibilitam o tratamento de métodos como entidades que podem ser 
+atribuídas a variáveis e passadas como parâmetros.
+
+São parecidos com o conceito de ponteiros de função em outras linguagens, mas ao contrário dos ponteiros de 
+função, são orientados a objetos e fortemente tipados.
+
+```
+delegate double Funcao(double x);
+
+class Multiplicador
+{
+    double fator;
+    public Multiplicador(double fator) 
+    {
+        this.fator = fator;
+    }
+    public double Multiplicar(double x) 
+    {
+        return x * fator;
+    }
+}
+```
+
+O exemplo acima declara e usa um tipo delegado chamado Funcao. Nesse caso, uma instância do delegate Funcao pode 
+fazer referência a qualquer método que usa um parâmetro `double` e retorna um valor `double`.
+
+Delegates podem ser criados usando funções anônimas, que são "métodos embutidos" criados dinamicamente. Funções 
+anônimas podem ver as variáveis locais dos métodos ao redor: 
+
+```
+double[] dobro =  Dobrar(a, (double x) => x * 2.0);
+```
+
+### Arrays (matrizes e vetores)
+
+Matriz é uma estrutura de dados que contém algumas variáveis acessadas por meio de índices calculados, elas não 
+precisam ser declaradas antes de serem usadas. Em vez disso, os tipos de matriz são construídos utilizando o nome
+do tipo seguido de colchetes:
+
+- `int[]` = matriz unidimensional
+- `int[3]` = matriz unidimensional com três elementos do tipo `int`, cada elemento possui o valor inicial `null`
+- `int[] a = new int[] {1, 2, 3}` = matriz unidimensional com três elementos, cada elemento possui seu valor definido
+- `int[] a = {1, 2, 3}` = mesma estrutura do exemplo acima
+- `int[,]` = matriz bidimensional
+- `int[][]` = matriz unidimensional da matriz unidimensional
+
+O operador `new` permite que os valores iniciais dos elementos da matriz sejam especificados através de um 
+inicializador de matriz (uma lista de expressões entre chaves), observe o terceiro exemplo da lista acima, o 
+tamanho da matriz é inferido do número de expressões entre chaves.
+
+O número de dimensões de um tipo de matriz é o número um (1) mais (+) o número de vírgulas escrito entre os 
+colchetes do tipo de matriz.
+
+### Enumeradores
+
+Enumeradores são tipos com um conjunto de constantes nomeadas. É utilizado quando você quer delimitar os valores
+que o tipo pode ter. 
+
+```
+enum Alinhamento: sbyte
+{
+    Esquerda = -1,
+    Centro = 0,
+    Direira = 1
+}
+```
+
+O código acima define um enumerador que possui o seu tipo subjacente `sbyte`
+
+### Nullable types
+
+Os tipos de valor anulável também não precisam ser declarados antes de serem usados.
 
 ## Aplicativo Console
 
@@ -274,7 +381,11 @@ Atributos fornecem uma maneira de associar informações ao código de forma dec
 elemento reutilizável que pode ser aplicado a uma variedade de destinos: classes, structs, métodos, construtores 
 e muito mais. As marcações de atributos são fáceis de identificar, pois sempre estão entre colchetes: `[Atributo]`
 
-No C#, os atributos são classes que herdam da classe base Attribute. 
+No C#, os atributos são classes que herdam da classe base Attribute. Seus construtores públicos controlam as 
+informações que devem ser fornecidas quando o atributo é anexado a uma entidade. Informações adicionais podem ser
+fornecidas ao através de propriedades públicas da classe do atributo
+
+Um atributo também pode ser entendido como um modificador que controla alguns comportamentos de tipos e membros.
 
 # Reflexão
 
