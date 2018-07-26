@@ -10,7 +10,7 @@ namespace ClassesAbstratasMetodosVirtuais
 
         public Constante(double valor)
         {
-            /*Observe o uso da palavra this: 
+            /* Observe o uso da palavra this: 
              * Temos dois membros de nomes iguais (valor), o primeiro é o parâmetro do construtor e o segundo
              * é um campo da instancia da classe. 
              * 
@@ -23,7 +23,7 @@ namespace ClassesAbstratasMetodosVirtuais
             this.valor = valor;
         }
 
-        public override double Calcular(Dictionary<string, object> variaveis)
+        public override double Processar(Dictionary<string, object> variaveis)
         {
             throw new NotImplementedException();
         }
