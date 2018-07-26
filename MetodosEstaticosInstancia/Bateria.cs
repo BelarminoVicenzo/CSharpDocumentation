@@ -23,7 +23,8 @@ namespace MetodosEstaticosInstancia
 
         public Bateria()
         {
-            NumeroSerie = proximoNumeroSerie++;
+            proximoNumeroSerie++;
+            NumeroSerie = proximoNumeroSerie;
         }
 
         public int ObterNumeroSerie()

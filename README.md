@@ -61,12 +61,7 @@ classe.
 Métodos estáticos podem acessar diretamente apenas membros estáticos, métodos de instância podem acessar membros
 estáticos e de instância. Observe o projeto *MetodosEstaticosInstancia* para ver o recurso na prática.
 
-### A palavra reservada this
-
-A instância em que um método de instância foi invocado pode ser explicitamente acessada como `this`. É um erro se
-referir a `this` em um método estático.
-
-## Herança
+### Herança
 
 Herança é um recurso das linguagens de programação orientadas a objeto que permite a definição de uma classe 
 base (classe pai) que fornece funcionalidades (dados e comportamento) a classes derivadas (classes filhas) que 
@@ -82,15 +77,30 @@ mínimo de funcionalidades.
 *Herança implícita* denota o fato de que todas as classes no .Net herdam da classe base `Object` ou de algum tipo
 derivado dele
 
-### virtual
+### A palavra reservada this
+
+A instância em que um método de instância foi invocado pode ser explicitamente acessada como `this`. É um erro se
+referir a `this` em um método estático.
+
+A classe *Constante* do projeto ClassesAbstratasMetodosVirtuais demonstra e explica a utilização desse recurso.
+
+### Métodos virtuais
 
 Para permitir a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `virtual` no
-método da classe base, muito utilizado quando queremos substituir a implementação de um método na classe base. A
-palavra override deve ser utilizada na classe derivada. É uma abordagem para evitar redefinições acidentais. É
-possível chamar o conteúdo do método na classe base através da palavra chave `base`
+método da classe base. Esse recursos é muito utilizado quando queremos substituir ou estender implementação de um
+método que foi definido na classe base. A palavra `override` deve ser utilizada na classe derivada. Sua utilização
+é uma medida de segurança para evitar redefinições acidentais. É possível chamar o conteúdo do método da classe 
+base na classe derivada através da palavra chave `base`
+
+### Métodos abstratos
 
 Para obrigar a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `abstract` no
 método da classe base.
+
+Um método abstrato é um método virtual sem implementação; é permitido somente em uma classe que também é 
+declarada como abstrata.
+
+Observe o projeto ClassesAbstratasMetodosVirtuais para entender melhor o conceito.
 
 ### Classes abstratas
 

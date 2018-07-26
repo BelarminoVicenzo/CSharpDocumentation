@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atributos", "Atributos\Atri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetodosEstaticosInstancia", "MetodosEstaticosInstancia\MetodosEstaticosInstancia.csproj", "{60D59980-AF0D-4BEA-B7AC-50DAA09447E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassesAbstratasMetodosVirtuais", "ClassesAbstratasMetodosVirtuais\ClassesAbstratasMetodosVirtuais.csproj", "{64CE8BA1-D026-40E2-986C-DAEEF3B78158}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{60D59980-AF0D-4BEA-B7AC-50DAA09447E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60D59980-AF0D-4BEA-B7AC-50DAA09447E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60D59980-AF0D-4BEA-B7AC-50DAA09447E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64CE8BA1-D026-40E2-986C-DAEEF3B78158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64CE8BA1-D026-40E2-986C-DAEEF3B78158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64CE8BA1-D026-40E2-986C-DAEEF3B78158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64CE8BA1-D026-40E2-986C-DAEEF3B78158}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
