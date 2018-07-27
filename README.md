@@ -47,6 +47,15 @@ Embora eles sejam usados algumas vezes de maneira intercambiável, uma classe e 
 - O objeto é uma entidade concreta com base em uma classe, conhecido como instância de uma classe. Um objeto é 
 basicamente um bloco de memória que foi alocado e configurado de acordo com o esquema (classe).
 
+# Membros de classes
+
+Campos, propriedades, métodos e eventos em uma classe são denominados de membros de classe
+
+Os membros de uma classe podem ser estáticos ou de instância. 
+
+>Os membros **estáticos pertencem às classes** e os membros de **instância pertencem aos objetos** (instâncias 
+>das classes).
+
 ### Comparação de objetos e igualdade de valor
 
 Em primeiro lugar, precisamos distinguir se queremos saber se duas ou mais variáveis representam o mesmo objeto 
@@ -78,13 +87,38 @@ derivadas que implementam seus métodos abstratos.
 Uma classe abstrata não precisa conter membros abstratos. No entanto, se uma classe contiver um membro abstrato,
 ela deverá ser declarada como abstrata.
 
-# Membros de classes
+### Classes estáticas
 
-Campos, propriedades, métodos e eventos em uma classe são denominados de membros de classe
+Uma classe estática não pode ser instanciada, em outras palavras, você não pode usar a palavra-chave `new` para 
+criar uma variável do tipo de classe. Como não há nenhuma variável de instância, você acessa os membros de uma 
+classe estática usando o próprio nome de classe.
 
-Os membros de uma classe podem ser estáticos ou de instância. 
+Uma classe estática pode ser usada como um contêiner de métodos que realizam operações (como cálculos) e não 
+precisam guardar os dados.
 
->Os membros **estáticos pertencem às classes** e os membros de **instância pertencem aos objetos** (instâncias das classes).
+As informações da classe estática são carregadas quando o programa que faz referência à mesma é carregado. O 
+programa não pode especificar exatamente quando a classe será carregada, porém é garantido que ela será carregada
+e terá seus campos inicializados e seu construtor estático chamado antes que a classe seja referenciada pela 
+primeira vez em seu programa. 
+
+Um construtor estático é chamado apenas uma vez e uma classe estática permanece na memória pelo tempo de vida do
+do programa.
+
+É mais comum declarar uma classe não estática com alguns membros estáticos do que declarar uma classe inteira 
+como estática. 
+
+Métodos estáticos podem ser sobrecarregados, mas não substituídos, porque pertencem à classe e não a qualquer 
+instância da classe.
+
+Propriedades e métodos estáticos não podem acessar eventos e campos não estáticos no tipo que os contêm e não 
+podem acessar uma variável de instância de nenhum objeto, a menos que esta seja passada explicitamente em um 
+parâmetro de método.
+
+Membros estáticos são inicializados antes que o membro estático seja acessado pela primeira vez e antes que o 
+construtor estático seja chamado.
+
+>Dois usos comuns dos campos estáticos são manter uma contagem do número de objetos que foram instanciados ou 
+>armazenar um valor que deve ser compartilhado entre todas as instâncias.
 
 ### Acessibilidade/Visibilidade de membros
 
