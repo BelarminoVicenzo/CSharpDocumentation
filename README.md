@@ -178,6 +178,8 @@ Por padrão, quando um tipo de valor é passado para um método, é passada uma 
 dito, assim alterações no argumento não têm nenhum efeito sobre a cópia original. Você pode alterar esse 
 comportamento passando um tipo de valor por referência usando a palavra-chave `ref`.
 
+Para passar por referência com a intenção de evitar a cópia, mas não alterar o valor, use o modificador `in`.
+
 Métodos estáticos podem acessar diretamente apenas membros estáticos, métodos de instância podem acessar membros
 estáticos e de instância. Observe o projeto *MetodosEstaticosInstancia* para ver o recurso na prática.
 
@@ -237,7 +239,35 @@ uma exceção for lançada do código no bloco definido pela instrução `using`
 
 #### Funções locais ou métodos aninhados
 
-Funções locais são métodos privados de um tipo que estão aninhados em outro membro. Eles só podem ser chamados do membro que os contém.
+Funções locais são métodos privados de um tipo que estão aninhados em outro membro. Eles só podem ser chamados do
+membro que os contém.
+
+#### Extension methods
+
+Um método de extensão é um tipo especial de método estático que permite adicionar novos métodos a um tipo/classe
+existente sem que seja necessário modificar, recompilar ou criar uma nova classe derivada da classe estendida.
+Apesar de serem estáticos, métodos de extensão são chamados como se fossem métodos de uma instância do tipo 
+estendido.
+
+A implementação de um método de extensão se dá da seguinte forma: um método estático onde seu primeiro parâmetro
+especifica o tipo a ser extendido precedido do modificador `this`: 
+
+```
+public static class MinhasExtensoes
+{
+    public static int ContarPalavras(this String str)
+    {
+        return str.Split(new char[] {' ', '.', '?' }, 
+            StringSplitOptions.RemoveEmptyEntries).Length;
+    }
+}
+```
+
+Os métodos de extensão só estarão no escopo quando você importar explicitamente o namespace para seu código fonte
+com uma diretiva `using`.
+
+Em geral, provavelmente você chamará métodos de extensão com muito mais frequência do que implementará os seus 
+próprios.
 
 ### Construtores
 
@@ -617,3 +647,4 @@ Apesar de retornar uma `Task`, um método assíncrono não faz uso de `return Ta
 Você pode imaginar que esse método retorna quando atinge um `await`, porém a task retornada indica que o trabalho
 não foi concluído, que ainda está em andamento. O método será retomado quando a tarefa em espera for concluída. 
 Após a execução completa, a task retornada indicará a conclusão.
+
