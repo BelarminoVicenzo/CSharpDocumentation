@@ -10,6 +10,7 @@ Tipos estão contidos em namespaces; classes e interfaces são exemplos de tipos
 eventos são exemplos de membros. 
 
 Quando os programas em C# são compilados, eles são empacotados fisicamente em assemblies que normalmente têm a 
+Quando os programas em C# são compilados, eles são empacotados fisicamente em assemblies que normalmente têm a 
 extensão de arquivo .exe (aplicativos) ou .dll (bibliotecas).
 
 ## Compilação
@@ -109,8 +110,8 @@ No caso de **campos estáticos**, não importa quantas instâncias da classe sã
 uma cópia do campo** compartilhado entre todas as instâncias, pois este percente a classe e não a instancia da 
 classe (objeto).
 
-Campos `readonly` (somente leitura) só podem ser alterados na parte da declaração do campo ou no construtor da 
-classe.
+>Campos `readonly` (somente leitura) só podem ser alterados na parte da declaração do campo ou no construtor da 
+>classe.
 
 ### Métodos
 
