@@ -21,19 +21,65 @@ processados.
 
 ## Tipos de referência e tipos de valor
 
-Há dois tipos em C#: tipos de referência e tipos de valor. As variáveis de tipos de valor contêm diretamente seus
-dados enquanto variáveis de tipos de referência armazenam referências a seus dados (objetos). Com tipos de 
-referência, é possível que duas variáveis referenciem o mesmo objeto e, portanto, é possível que operações em uma
-variável afetem o objeto referenciado por outra variável. Com tipos de valor, cada variável tem sua própria cópia
-dos dados e não é possível que operações em uma variável afetem a outra (exceto no caso de variáveis de 
-parâmetros `ref` e `out`).
+Há dois tipos em C#: tipos de referência e tipos de valor. 
+
+Variáveis de tipos de valor contêm diretamente seus dados enquanto variáveis de tipos de referência armazenam 
+referências a seus dados (objetos). Com tipos de referência, é possível que duas variáveis referenciem o mesmo 
+objeto e, portanto, é possível que operações em uma variável afetem o objeto referenciado por outra variável. 
+Com tipos de valor, cada variável tem sua própria cópia dos dados e não é possível que operações em uma variável
+afetem a outra (exceto no caso de variáveis de parâmetros `ref` e `out`).
+
+Um tipo que é definido como uma classe, delegate, matriz ou interface é um tipo de referência.
+
+Structs são tipos de referência assim, uma variável do tipo struct guarda uma cópia do objeto inteiro.
 
 ## Classes
 
 Uma classe é uma estrutura que combina ações (métodos) e estado (campos/propriedades) em uma única unidade, ela
 fornece uma definição para instâncias da classe criadas dinamicamente, também conhecidas como objetos.
 
+## Classes X Objetos
+
+Embora eles sejam usados algumas vezes de maneira intercambiável, uma classe e um objeto são coisas diferentes:
+
+- A classe define um tipo de objeto, mas não é um objeto em si.
+- O objeto é uma entidade concreta com base em uma classe, conhecido como instância de uma classe. Um objeto é 
+basicamente um bloco de memória que foi alocado e configurado de acordo com o esquema (classe).
+
+### Comparação de objetos e igualdade de valor
+
+Em primeiro lugar, precisamos distinguir se queremos saber se duas ou mais variáveis representam o mesmo objeto 
+na memória ou se os valores de um ou mais de seus campos são iguais:
+
+- Para determinar se duas instâncias de classe se referem ao mesmo local na memória, use o método `Equals` estático;
+- Para determinar se os campos das instâncias têm os mesmos valores, use o método `Equals` da instância
+
+```
+Pessoa p1 = new Pessoa("Wallace", 37);
+Pessoa p2;
+p2.Nome = "Wallace";
+p2.Idade = 37;
+
+if (p2.Equals(p1))
+    Console.WriteLine("p2 e p1 possuem os mesmo valores");
+```
+
+### Classes abstratas
+
+Você pode declarar uma classe como abstrata se quiser impedir a instanciação direta usando a palavra-chave new. 
+São classes que servem apenas de modelo para classes que herdarão dela. Ela possui propriedades e apenas a 
+assinatura de métodos sem sua implementação.
+
+Uma classe abstrata apesar de não poder ser instanciada, pode ter um ou mais construtores, uma vez que esses
+construtores podem ser chamados por suas classes derivadas. Elas só podem ser usadas por meio de classes 
+derivadas que implementam seus métodos abstratos.
+
+Uma classe abstrata não precisa conter membros abstratos. No entanto, se uma classe contiver um membro abstrato,
+ela deverá ser declarada como abstrata.
+
 # Membros de classes
+
+Campos, propriedades, métodos e eventos em uma classe são denominados de membros de classe
 
 Os membros de uma classe podem ser estáticos ou de instância. 
 
@@ -47,9 +93,10 @@ Os membros de uma classe podem ser estáticos ou de instância.
 
 ### Parâmetros de tipo
 
-Uma classe pode especificar um conjunto de parâmetros de tipo (o nome da classe com colchetes angulares e uma 
-lista de nomes de parâmetros de tipo separados por vírgulas) `public class Par<TPrimeiro,TSegundo>`. Os parâmetros 
-podem ser usados no corpo da classe.
+Uma classe pode especificar um conjunto de *parâmetros de tipo* identicado com uma lista de nome dos tipos
+separados por vírgula e entre colchetes angulares:  `public class Par<TPrimeiro,TSegundo>`. Esses parâmetros
+servem como um espaço reservado para o tipo real (o tipo concreto) que o código cliente fornecerá ao criar uma 
+instância da classe. Os parâmetros podem ser usados no corpo da classe.
 
 Um tipo de classe que é declarado para pegar parâmetros de tipo é chamado de *tipo de classe genérica*.
 
@@ -76,15 +123,53 @@ Herança é um recurso das linguagens de programação orientadas a objeto que p
 base (classe pai) que fornece funcionalidades (dados e comportamento) a classes derivadas (classes filhas) que 
 herdam (reutiliza), estendem ou modificam tais funcionalidades.
 
-A classe cujos membros são herdados é chamada de classe base. A classe que herda os membros da classe base é 
+A classe cujos membros são herdados é chamada de classe base, a classe que herda os membros da classe base é 
 chamada de classe derivada.
 
 A herança de classes expressa o relacionamento "é um" entre uma classe base e suas classes derivadas. Já a 
 implementação múltipla de interfaces expressam o relacionamento "pode fazer", pois a interface define um conjunto
 mínimo de funcionalidades.
 
+Conceitualmente, uma classe derivada é uma especialização da classe base. Por exemplo, se tiver uma classe base 
+Animal, você terá uma classe derivada chamada Mamífero e outra classe derivada chamada Reptil. Mamífero e Réptil 
+são tipos mais específicos que Animal. Cada classe derivada representa especializações diferentes da classe base.
+
 *Herança implícita* denota o fato de que todas as classes no .Net herdam da classe base `Object` ou de algum tipo
-derivado dele
+derivado dele.
+
+Uma classe derivada pode ocultar membros da classe base declarando membros com mesmo nome e assinatura. O 
+modificador new pode ser usado para indicar explicitamente que o membro não pretende ser uma substituição do 
+membro base: 
+
+```
+public class BaseClass
+{
+    public void DoWork() { WorkField++; }
+    public int WorkField;
+    public int WorkProperty
+    {
+        get { return 0; }
+    }
+}
+
+public class DerivedClass : BaseClass
+{
+    public new void DoWork() { WorkField++; }
+    public new int WorkField;
+    public new int WorkProperty
+    {
+        get { return 0; }
+    }
+}
+```
+
+### Polimorfismo
+
+O polimorfismo pode ser expresso de duas formas: 
+
+- Em tempo de execução, os objetos de uma classe derivada podem ser tratados como objetos de uma classe base
+- Classes base podem definir e implementar métodos virtuais e classes derivadas podem substituí-los, o que 
+significa que elas fornecem sua própria definição e implementação.
 
 ### A palavra reservada this
 
@@ -93,31 +178,23 @@ referir a `this` em um método estático.
 
 A classe *Constante* do projeto ClassesAbstratasMetodosVirtuais demonstra e explica a utilização desse recurso.
 
-### Métodos virtuais
+### Métodos virtuais e métodos abstratos
+
+Quando uma classe base declara um método como virtual, uma classe derivada **PODE** substituir o método por sua 
+própria implementação. Se uma classe base declarar um membro como abstrato, esse método **DEVE** ser substituído
+em qualquer classe não abstrata que herdar diretamente da classe.
 
 Para permitir a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `virtual` no
-método da classe base. Esse recursos é muito utilizado quando queremos substituir ou estender implementação de um
-método que foi definido na classe base. A palavra `override` deve ser utilizada na classe derivada. Sua utilização
-é uma medida de segurança para evitar redefinições acidentais. É possível chamar o conteúdo do método da classe 
-base na classe derivada através da palavra chave `base`
-
-### Métodos abstratos
+método da classe base. Esse recursos é muito utilizado quando queremos substituir ou estender a implementação de 
+um método que foi definido na classe base. A palavra `override` deve ser utilizada na classe derivada. Sua 
+utilização é uma medida de segurança para evitar redefinições acidentais. É possível chamar o conteúdo do método
+da classe base na classe derivada através da palavra chave `base`
 
 Para obrigar a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `abstract` no
-método da classe base.
-
-Um método abstrato é um método virtual sem implementação; é permitido somente em uma classe que também é 
-declarada como abstrata.
+método da classe base. Um método abstrato é um método virtual sem implementação; é permitido somente em uma 
+classe que também é declarada como abstrata.
 
 Observe o projeto ClassesAbstratasMetodosVirtuais para entender melhor o conceito.
-
-### Classes abstratas
-
-São classes que servem apenas de modelo para classes que herdarão dela. Ela possui propriedades e apenas a 
-assinatura de métodos.
-
-Uma classe abstrata apesar de não poder ser instanciada, pode ter um ou mais construtores, uma vez que esses
-construtores podem ser chamados por suas classes derivadas
 
 # Instâncias de classes
 
@@ -146,9 +223,14 @@ Um construtor é declarado como um método sem nenhum tipo de retorno e o mesmo 
 
 Construtores de instância podem ser sobrecarregados, são invocados usando o operador `new` e não são herdados.
 
-O C# dá suporte aos construtores estáticos e de instância. Um construtor de instância é um membro que implementa 
-as ações necessárias para inicializar uma instância de uma classe. Um construtor estático é um membro que 
-implementa as ações necessárias para inicializar uma classe quando ele for carregado pela primeira vez.
+O C# dá suporte aos construtores estáticos e de instância. 
+
+Um construtor de instância é um membro que implementa as ações necessárias para inicializar uma instância de uma
+classe. 
+
+Um construtor estático é um membro que implementa as ações necessárias para inicializar uma classe quando ele for 
+carregado pela primeira vez. Esse construtor é chamado uma vez, automaticamente, antes de uma instância da classe
+ser criada ou algum de seus membros referenciado.
 
 ### Propriedades
 
@@ -160,6 +242,7 @@ Uma propriedade é declarada como um campo, exceto quando a declaração termina
 acessador `set` gravado entre os delimitadores { e } em vez de terminar com um ponto-e-vírgula `{ get; set; }`.
 
 ### Eventos
+
 Um evento é um membro que permite que uma classe ou objeto forneça notificações. Um evento é declarado como um 
 campo com a palavra chave `event` e seu tipo deverá ser um `delegate`.
 
@@ -237,6 +320,23 @@ O código acima define um enumerador que possui o seu tipo subjacente `sbyte`
 ### Nullable types
 
 Os tipos de valor anulável também não precisam ser declarados antes de serem usados.
+
+### Tipos anônimos
+
+Em alguns casos, é inconveniente criar uma classe para conjuntos simples de valores que você não pretende 
+armazenar ou transmitir fora dos limites de método. Você pode criar *tipos anônimos* para isso.
+
+### Tipo dinâmico
+
+Na maioria dos casos, dynamic funciona como se tivesse o tipo object. O tipo dynamic dá suporte a qualquer 
+operação, se código for inválido os erros serão capturados em tempo de execução.
+
+Assim como `null`, a maior parte de operações que usam dynamic retornam dynamic.
+
+### Tuplas
+
+É comum querer retornar mais de um valor de um método. Você pode criar tipos de tupla que retornam vários valores
+em uma única chamada de método.
 
 ## Aplicativo Console
 
@@ -355,6 +455,12 @@ O C# usa namespaces para organizar tipos; namespaces são como pastas virtuais o
 são organizados.
 
 Observe que o namespace padrão da aplicação é baseado no diretório físico onde a mesma se encontra.
+
+Namespaces são delimitados por ponto "."
+
+A diretiva `using` também pode ser usada para criar um apelido para um namespace. 
+
+`using Co = Company.Proj.Nested;`
 
 # Programação assíncrona
 
