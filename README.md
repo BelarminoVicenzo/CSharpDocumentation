@@ -13,6 +13,16 @@ Quando os programas em C# são compilados, eles são empacotados fisicamente em 
 Quando os programas em C# são compilados, eles são empacotados fisicamente em assemblies que normalmente têm a 
 extensão de arquivo .exe (aplicativos) ou .dll (bibliotecas).
 
+## Aplicativo Console
+
+O Visual Studio usa um modelo de aplicativo para criar seu projeto. O modelo de aplicativo Console define
+automaticamente uma classe `Program` que contém um único método `Main` que usa um array de string como um
+parâmetro.
+
+O método `Main` é o ponto de entrada de um aplicativo C#. Esse método é chamado automaticamente pelo tempo de 
+execução quando o aplicativo é iniciado. O array de strings definido como seu parâmetro define os parâmetros
+de linha de comando fornecidos.
+
 ## Compilação
 
 O C# permite que o texto de origem (código fonte) de um programa seja armazenado em vários arquivos de origem
@@ -34,7 +44,20 @@ Um tipo que é definido como uma classe, delegate, matriz ou interface é um tip
 
 Structs são tipos de referência assim, uma variável do tipo struct guarda uma cópia do objeto inteiro.
 
-## Classes
+## Namespaces
+
+O C# usa namespaces para organizar tipos; namespaces são como pastas virtuais ou lógicas, onde as classes/tipos
+são organizados.
+
+Observe que o namespace padrão da aplicação é baseado no diretório físico onde a mesma se encontra.
+
+Namespaces são delimitados por ponto "."
+
+A diretiva `using` também pode ser usada para criar um apelido para um namespace. 
+
+`using Co = Company.Proj.Nested;`
+
+# Classes
 
 Uma classe é uma estrutura que combina ações (métodos) e estado (campos/propriedades) em uma única unidade, ela
 fornece uma definição para instâncias da classe criadas dinamicamente, também conhecidas como objetos.
@@ -47,32 +70,205 @@ Embora eles sejam usados algumas vezes de maneira intercambiável, uma classe e 
 - O objeto é uma entidade concreta com base em uma classe, conhecido como instância de uma classe. Um objeto é 
 basicamente um bloco de memória que foi alocado e configurado de acordo com o esquema (classe).
 
-# Membros de classes
+## Instâncias de classes
 
-Campos, propriedades, métodos e eventos em uma classe são denominados de membros de classe
+O operador `new Classe()` transmite a ideia de um novo objeto, por exemplo a abertura de uma *nova* conta
+bancária. Quando um cliente vai a um banco para abrir uma nova conta bancária, esta deve conter os dados do seu
+titular, bem como um saldo inicial. Isso denota o comportamento de um construtor, que em termos práticos de 
+programação seria:
+
+```
+public class ContaBancaria 
+{
+	public string Titular { get; set; }
+	public decimal Saldo { get; set; }
+}
+
+//Abrindo uma nova conta
+var novaConta = new ContaBancaria("João da Silva", 0.0m);
+```
+
+Construtores são usados para inicializar objetos desse tipo de classe, eles são chamados quando você cria um 
+objeto usando `new`. 
+
+## Membros de classes
+
+Campos, propriedades, métodos e eventos em uma classe são denominados de *membros de classe*, esses membros
+representam os dados e comportamento da classe.
+
+### Modificadores de acesso/visibilidade de membros
+
+- `public`: acessíveis por qualquer outro código no mesmo assembly ou em outro assembly que faz referência a ele
+- `private`: acessíveis apenas para a classe container e para classes derivadas **aninhadas** na mesma
+- `protected`: acessíveis apenas para a classe container e classes derivadas
+- `internal`: acessíveis apenas para a classe container e  classes derivadas dentro do mesmo assembly
+
+Classes derivadas não podem ter acessibilidade maior do que seus tipos base.
+
+### Membros estáticos e de instância
 
 Os membros de uma classe podem ser estáticos ou de instância. 
 
 >Os membros **estáticos pertencem às classes** e os membros de **instância pertencem aos objetos** (instâncias 
 >das classes).
 
-### Comparação de objetos e igualdade de valor
+Confira abaixo uma descrição de cada membro de classe:
 
-Em primeiro lugar, precisamos distinguir se queremos saber se duas ou mais variáveis representam o mesmo objeto 
-na memória ou se os valores de um ou mais de seus campos são iguais:
+### Campos
 
-- Para determinar se duas instâncias de classe se referem ao mesmo local na memória, use o método `Equals` estático;
-- Para determinar se os campos das instâncias têm os mesmos valores, use o método `Equals` da instância
+Campos nada mais são que variáveis declaradas diretamente em uma classe, estando dessa forma, disponível no 
+escopo da classe. Um campo é uma variável que está associada a estrutura de uma classe. 
+
+>Os campos normalmente armazenam os dados que devem estar acessíveis a mais de um método na classe e devem ser 
+>armazenados por mais tempo que o tempo de vida de qualquer método único, as variáveis que não são usadas fora 
+>do escopo de um método único devem ser declaradas como variáveis locais dentro do próprio corpo do método.
+
+Você só deve usar campos para variáveis que têm acessibilidade private ou protected. A classe deve expor os dados
+para o código externo de maneira segura, fornecendo-os por meio de propriedades e métodos, atavés deles você pode
+proteger a classe contra valores de entrada inválidos.
+
+Um campo declarado sem o modificador `static` define um campo de instância. Cada instância da classe terá cópia 
+separada desse campo.
+
+No caso de **campos estáticos**, não importa quantas instâncias da classe serão criadas, sempre **haverá apenas 
+uma cópia do campo** compartilhado entre todas as instâncias, pois este percente a classe e não a instancia da 
+classe (instância/objeto).
+
+>Campos `readonly` (somente leitura) só podem ser alterados na parte da declaração do campo ou no construtor da 
+>classe.
+
+### Propriedades
+
+**Propriedades são métodos** de uma classe **acessados como se fossem campos** dessa classe.
+
+As propriedades têm muitos usos: 
+
+- Validar os dados antes de permitir uma alteração; 
+- Expor os dados em uma classe em que esses dados são recuperados de outra fonte/origem, como um banco de dados; 
+- Executar uma ação quando os dados são alterados, como acionar um evento ou alterar o valor de outros campos.
+
+Uma responsabilidade das propriedades é fornecer proteção para um campo a fim evitar que ele seja alterado sem o
+conhecimento do objeto.
+
+As propriedades são uma extensão natural dos campos e diferentemente destes, as propriedades não denotam locais 
+de armazenamento, por isso elas têm acessadores que especificam as instruções a serem executadas quando os 
+valores forem lidos ou gravados.
+
+Uma propriedade é declarada como um campo, exceto quando a declaração termina com um acessador `get` e/ou um 
+acessador `set` gravado entre os delimitadores { e } em vez de terminar com um ponto-e-vírgula `{ get; set; }`.
+
+#### Propriedades autoimplementadas
+
+Em alguns casos, os acessadores `get` e `set` da propriedade apenas atribuem ou recuperam um valor de um campo 
+sem incluir nenhuma lógica adicional, nesses casos, você pode usar propriedades autoimplementadas: o compilador 
+cria campos privados e anônimos que podem ser acessados somente pelos acessadores `get`e `set` da propriedade, 
+assim não é necessário declarar os campos explicitamente no corpo da classe.
+
+Você define uma propriedade autoimplementada usando as palavras-chave `get` e `set` sem fornecer qualquer 
+implementação. 
+
+### Métodos
+
+Métodos definem ações que uma classe pode executar.
+
+>Parâmetros são definições de tipo e nome de dados de entrada na assinatura do método
+>Argumentos são os valores concretos fornecidos pelo código externo na chamada do método
+
+Por padrão, quando um tipo de valor é passado para um método, é passada uma cópia em vez do objeto propriamente 
+dito, assim alterações no argumento não têm nenhum efeito sobre a cópia original. Você pode alterar esse 
+comportamento passando um tipo de valor por referência usando a palavra-chave `ref`.
+
+Métodos estáticos podem acessar diretamente apenas membros estáticos, métodos de instância podem acessar membros
+estáticos e de instância. Observe o projeto *MetodosEstaticosInstancia* para ver o recurso na prática.
+
+#### Métodos virtuais e métodos abstratos
+
+Quando uma classe base declara um método como virtual, uma classe derivada **PODE** substituir o método por sua 
+própria implementação. Se uma classe base declarar um membro como abstrato, esse método **DEVE** ser substituído
+em qualquer classe não abstrata que herdar diretamente da classe.
+
+Para permitir a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `virtual` no
+método da classe base. Esse recursos é muito utilizado quando queremos substituir ou estender a implementação de 
+um método que foi definido na classe base. A palavra `override` deve ser utilizada na classe derivada. Sua 
+utilização é uma medida de segurança para evitar redefinições acidentais. É possível chamar o conteúdo do método
+da classe base na classe derivada através da palavra chave `base`
+
+Para obrigar a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `abstract` no
+método da classe base. Um método abstrato é um método virtual sem implementação; é permitido somente em uma 
+classe que também é declarada como abstrata.
+
+Observe o projeto ClassesAbstratasMetodosVirtuais para entender melhor o conceito.
+
+#### Métodos iteradores
+
+Um iterador realiza uma iteração personalizada em uma coleção, como uma lista ou uma matriz. Um iterador usa a 
+instrução `yield return` para retornar um elemento da coleção de cada vez.
+
+Os métodos iteradores ou enumeradores retornam sequências que são avaliadas lentamente, isso significa que cada 
+item na sequência é gerado conforme a solicitação do código que está consumindo a sequência. Os métodos 
+enumeradores contêm uma ou mais instruções `yield return`.
+
+O tipo de retorno de um iterador pode ser `IEnumerable`, `IEnumerable<T>`, `IEnumerator` ou `IEnumerator<T>`.
 
 ```
-Pessoa p1 = new Pessoa("Wallace", 37);
-Pessoa p2;
-p2.Nome = "Wallace";
-p2.Idade = 37;
-
-if (p2.Equals(p1))
-    Console.WriteLine("p2 e p1 possuem os mesmo valores");
+static IEnumerable<string> LerArquivo(string arquivo)
+{
+    string linha;
+    using (StreamReader streamReader = File.OpenText(arquivo))
+    {
+        while ((linha = streamReader.ReadLine()) != null)
+        {
+            yield return linha;
+        }
+    }
+}
 ```
+
+O objeto retornado pelo método LerArquivo contém o código para gerar cada item em sequência. Neste exemplo, isso 
+envolve a leitura da próxima linha de texto do arquivo de origem e o retorno dessa cadeia de caracteres. Toda vez
+que o código de chamada solicita o próximo item da sequência, o código lê a próxima linha de texto do arquivo e a
+retorna. Após a leitura completa do arquivo, a sequência indicará que não há mais itens.
+
+A instrução `using` nesse método gerencia a limpeza de recursos. A variável inicializada na instrução `using` 
+(streamReader) deve implementar a interface `IDisposable`. Essa interface define um único método (Dispose) que 
+deve ser chamado quando o recurso for liberado. O compilador gera essa chamada quando a execução atingir a chave
+de fechamento da instrução `using`. O código gerado pelo compilador garante que o recurso seja liberado, mesmo se
+uma exceção for lançada do código no bloco definido pela instrução `using`.
+
+#### Funções locais ou métodos aninhados
+
+Funções locais são métodos privados de um tipo que estão aninhados em outro membro. Eles só podem ser chamados do membro que os contém.
+
+### Construtores
+
+Construtores são métodos chamados automaticamente quando o objeto é criado/instanciado pela primeira vez. 
+Geralmente, eles são usados para inicializar os dados de um objeto.
+
+Um construtor é declarado como um método sem nenhum tipo de retorno e o mesmo nome da classe que o contém.
+
+Construtores de instância podem ser sobrecarregados, são invocados usando o operador `new` e não são herdados.
+
+O C# dá suporte aos construtores estáticos e de instância. 
+
+Um construtor de instância é um membro que implementa as ações necessárias para inicializar uma instância de uma
+classe. 
+
+Um construtor estático é um membro que implementa as ações necessárias para inicializar uma classe quando ele for 
+carregado pela primeira vez. Esse construtor é chamado uma vez, automaticamente, antes de uma instância da classe
+ser criada ou algum de seus membros referenciado.
+
+### Eventos
+
+Evento é um membro que permite que uma classe ou objeto forneça notificações sobre ocorrências (como cliques de 
+botão ou a conclusão bem-sucedida de um método) na classe container a outras classes e objetos . Um evento é 
+declarado como um campo com a palavra chave `event` e seu tipo deverá ser um `delegate`.
+
+Eventos são definidos e disparados por *delegates*.
+
+### Constantes 
+
+Constantes são campos ou propriedades com valores imutáveis, definidos em tempo de compilação e que não são 
+alterados durante a vida útil do programa.
 
 ### Classes abstratas
 
@@ -120,12 +316,6 @@ construtor estático seja chamado.
 >Dois usos comuns dos campos estáticos são manter uma contagem do número de objetos que foram instanciados ou 
 >armazenar um valor que deve ser compartilhado entre todas as instâncias.
 
-### Acessibilidade/Visibilidade de membros
-
-- `private`: visíveis apenas para a classe base e para classes derivadas aninhadas na mesma
-- `protected`: visíveis apenas para classes derivadas
-- `internal`: visíveis apenas para classe derivadas dentro do mesmo assembly da classe base
-
 ### Parâmetros de tipo
 
 Uma classe pode especificar um conjunto de *parâmetros de tipo* identicado com uma lista de nome dos tipos
@@ -134,23 +324,6 @@ servem como um espaço reservado para o tipo real (o tipo concreto) que o códig
 instância da classe. Os parâmetros podem ser usados no corpo da classe.
 
 Um tipo de classe que é declarado para pegar parâmetros de tipo é chamado de *tipo de classe genérica*.
-
-### Campos
-
-Um campo é uma variável que está associada a estrutura de uma classe. Um campo declarado sem o modificador 
-`static` define um campo de instância. Cada instância da classe terá cópia separada desse campo.
-
-No caso de **campos estáticos**, não importa quantas instâncias da classe são criadas, sempre **haverá apenas 
-uma cópia do campo** compartilhado entre todas as instâncias, pois este percente a classe e não a instancia da 
-classe (objeto).
-
->Campos `readonly` (somente leitura) só podem ser alterados na parte da declaração do campo ou no construtor da 
->classe.
-
-### Métodos
-
-Métodos estáticos podem acessar diretamente apenas membros estáticos, métodos de instância podem acessar membros
-estáticos e de instância. Observe o projeto *MetodosEstaticosInstancia* para ver o recurso na prática.
 
 ### Herança
 
@@ -206,80 +379,30 @@ O polimorfismo pode ser expresso de duas formas:
 - Classes base podem definir e implementar métodos virtuais e classes derivadas podem substituí-los, o que 
 significa que elas fornecem sua própria definição e implementação.
 
+### Comparação de objetos e igualdade de valor
+
+Em primeiro lugar, precisamos distinguir se queremos saber se duas ou mais variáveis representam o mesmo objeto 
+na memória ou se os valores de um ou mais de seus campos são iguais:
+
+- Para determinar se duas instâncias de classe se referem ao mesmo local na memória, use o método `Equals` estático;
+- Para determinar se os campos das instâncias têm os mesmos valores, use o método `Equals` da instância
+
+```
+Pessoa p1 = new Pessoa("Wallace", 37);
+Pessoa p2;
+p2.Nome = "Wallace";
+p2.Idade = 37;
+
+if (p2.Equals(p1))
+    Console.WriteLine("p2 e p1 possuem os mesmo valores");
+```
+
 ### A palavra reservada this
 
 A instância em que um método de instância foi invocado pode ser explicitamente acessada como `this`. É um erro se
 referir a `this` em um método estático.
 
 A classe *Constante* do projeto ClassesAbstratasMetodosVirtuais demonstra e explica a utilização desse recurso.
-
-### Métodos virtuais e métodos abstratos
-
-Quando uma classe base declara um método como virtual, uma classe derivada **PODE** substituir o método por sua 
-própria implementação. Se uma classe base declarar um membro como abstrato, esse método **DEVE** ser substituído
-em qualquer classe não abstrata que herdar diretamente da classe.
-
-Para permitir a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `virtual` no
-método da classe base. Esse recursos é muito utilizado quando queremos substituir ou estender a implementação de 
-um método que foi definido na classe base. A palavra `override` deve ser utilizada na classe derivada. Sua 
-utilização é uma medida de segurança para evitar redefinições acidentais. É possível chamar o conteúdo do método
-da classe base na classe derivada através da palavra chave `base`
-
-Para obrigar a sobrescrita de um método da classe base em uma classe derivada, utilize a palavra `abstract` no
-método da classe base. Um método abstrato é um método virtual sem implementação; é permitido somente em uma 
-classe que também é declarada como abstrata.
-
-Observe o projeto ClassesAbstratasMetodosVirtuais para entender melhor o conceito.
-
-# Instâncias de classes
-
-O operador `new AlgumaClasse()` transmite a ideia de um novo objeto, por exemplo a abertura de uma *nova* conta
-bancária. Quando um cliente vai a um banco para abrir uma nova conta bancária, esta deve conter os dados do seu
-titular, bem como um saldo inicial. Isso denota o comportamento de um construtor, que em termos práticos de 
-programação seria:
-
-```
-public class ContaBancaria 
-{
-	public string Titular { get; set; }
-	public decimal Saldo { get; set; }
-}
-
-//Abrindo uma nova conta
-var novaConta = new ContaBancaria("João da Silva", 0.0m);
-```
-
-Construtores são usados para inicializar objetos desse tipo de classe, eles são chamados quando você cria um 
-objeto usando `new`. 
-
-### Construtores
-
-Um construtor é declarado como um método sem nenhum tipo de retorno e o mesmo nome da classe que o contém.
-
-Construtores de instância podem ser sobrecarregados, são invocados usando o operador `new` e não são herdados.
-
-O C# dá suporte aos construtores estáticos e de instância. 
-
-Um construtor de instância é um membro que implementa as ações necessárias para inicializar uma instância de uma
-classe. 
-
-Um construtor estático é um membro que implementa as ações necessárias para inicializar uma classe quando ele for 
-carregado pela primeira vez. Esse construtor é chamado uma vez, automaticamente, antes de uma instância da classe
-ser criada ou algum de seus membros referenciado.
-
-### Propriedades
-
-As propriedades são uma extensão natural dos campos, diferentemente destes, as propriedades não denotam locais de
-armazenamento, por isso elas têm acessadores que especificam as instruções a serem executadas quando os valores 
-forem lidos ou gravados.
-
-Uma propriedade é declarada como um campo, exceto quando a declaração termina com um acessador `get` e/ou um 
-acessador `set` gravado entre os delimitadores { e } em vez de terminar com um ponto-e-vírgula `{ get; set; }`.
-
-### Eventos
-
-Um evento é um membro que permite que uma classe ou objeto forneça notificações. Um evento é declarado como um 
-campo com a palavra chave `event` e seu tipo deverá ser um `delegate`.
 
 ### Delegates
 
@@ -373,48 +496,7 @@ Assim como `null`, a maior parte de operações que usam dynamic retornam dynami
 É comum querer retornar mais de um valor de um método. Você pode criar tipos de tupla que retornam vários valores
 em uma única chamada de método.
 
-## Aplicativo Console
-
-O Visual Studio usa um modelo de aplicativo para criar seu projeto. O modelo de aplicativo Console define
-automaticamente uma classe `Program` que contém um único método `Main` que usa um array de string como um
-parâmetro.
-
-O método `Main` é o ponto de entrada de um aplicativo C#. Esse método é chamado automaticamente pelo tempo de 
-execução quando o aplicativo é iniciado. O array de strings definido como seu parâmetro define os parâmetros
-de linha de comando fornecidos.
-
-## Métodos iteradores
-
-Os métodos iteradores ou enumeradores retornam sequências que são avaliadas lentamente, isso significa que cada 
-item na sequência é gerado conforme a solicitação do código que está consumindo a sequência. Os métodos 
-enumeradores contêm uma ou mais instruções `yield return`.
-
-```
-static IEnumerable<string> LerArquivo(string arquivo)
-{
-    string linha;
-    using (StreamReader streamReader = File.OpenText(arquivo))
-    {
-        while ((linha = streamReader.ReadLine()) != null)
-        {
-            yield return linha;
-        }
-    }
-}
-```
-
-O objeto retornado pelo método LerArquivo contém o código para gerar cada item em sequência. Neste exemplo, isso 
-envolve a leitura da próxima linha de texto do arquivo de origem e o retorno dessa cadeia de caracteres. Toda vez
-que o código de chamada solicita o próximo item da sequência, o código lê a próxima linha de texto do arquivo e a
-retorna. Após a leitura completa do arquivo, a sequência indicará que não há mais itens.
-
-A instrução `using` nesse método gerencia a limpeza de recursos. A variável inicializada na instrução `using` 
-(streamReader) deve implementar a interface `IDisposable`. Essa interface define um único método (Dispose) que 
-deve ser chamado quando o recurso for liberado. O compilador gera essa chamada quando a execução atingir a chave
-de fechamento da instrução `using`. O código gerado pelo compilador garante que o recurso seja liberado, mesmo se
-uma exceção for lançada do código no bloco definido pela instrução `using`.
-
-## Adição de dependências em projetos distintos
+## Adição de dependências em projetos/assemblies distintos
 
 O aplicativo console OlaMundo, consome uma função programada na *class library* (biblioteca de funções) 
 BibliotecaString. Para fazer uso da função:
@@ -484,28 +566,6 @@ var nomes = new List<string> {"José", "João", "Maria"};
 Console.WriteLine(nomes[2]);
 ``` 
 
-## Namespaces
-
-O C# usa namespaces para organizar tipos; namespaces são como pastas virtuais ou lógicas, onde as classes/tipos
-são organizados.
-
-Observe que o namespace padrão da aplicação é baseado no diretório físico onde a mesma se encontra.
-
-Namespaces são delimitados por ponto "."
-
-A diretiva `using` também pode ser usada para criar um apelido para um namespace. 
-
-`using Co = Company.Proj.Nested;`
-
-# Programação assíncrona
-
-Apesar de retornar uma `Task`, um método assíncrono não faz uso de `return Task`. Em vez disso, esse objeto `Task`
-é criado pelo código gerado pelo compilador quando você usa o operador `await`.
-
-Você pode imaginar que esse método retorna quando atinge um `await`, porém a task retornada indica que o trabalho
-não foi concluído, que ainda está em andamento. O método será retomado quando a tarefa em espera for concluída. 
-Após a execução completa, a task retornada indicará a conclusão.
-
 # Fazendo solicitações da Web
 
 Para fazer solicitações da Web usamos a classe `HttpClient`, um objeto dessa classe manipula a solicitação e as
@@ -531,3 +591,29 @@ Um atributo também pode ser entendido como um modificador que controla alguns c
 # Reflexão
 
 A ideia básica de Reflexão é que você escreva um código que examine outro código.
+
+# Programação assíncrona
+
+## Métodos assíncronos
+
+Usando `async`, você pode invocar métodos assíncronos sem usar retornos de chamada explícitos (return). 
+
+Se marcar um método com o modificador `async`, você poderá usar o operador `await` no método que o chamou. Quando
+o fluxo atinge uma expressão `await` no método assíncrono, ele retorna para o método que o chamou e o progresso 
+no método é suspenso até a tarefa aguardada ser concluída. Quando a tarefa for concluída, a execução poderá ser 
+retomada no método chamador.
+
+Um método assíncrono retorna para o método chamador quando encontra o primeiro objeto esperado que ainda não está
+completo ou chega ao final do método assíncrono, o que ocorrer primeiro.
+
+Um método assíncrono pode conter os tipos de retorno `Task<T>`, `Task` ou `null`. O tipo de retorno `null é usado
+principalmente para definir manipuladores de eventos, em que um tipo de retorno nulo é necessário. Um método 
+assíncrono que retorna nulo não pode ser aguardado e o chamador de um método de retorno nulo não pode capturar as
+exceções que esse método gera.
+
+Apesar de retornar uma `Task`, um método assíncrono não faz uso de `return Task`. Em vez disso, esse objeto `Task`
+é criado pelo código gerado pelo compilador quando você usa o operador `await`.
+
+Você pode imaginar que esse método retorna quando atinge um `await`, porém a task retornada indica que o trabalho
+não foi concluído, que ainda está em andamento. O método será retomado quando a tarefa em espera for concluída. 
+Após a execução completa, a task retornada indicará a conclusão.
