@@ -183,6 +183,11 @@ Para passar por referência com a intenção de evitar a cópia, mas não altera
 Métodos estáticos podem acessar diretamente apenas membros estáticos, métodos de instância podem acessar membros
 estáticos e de instância. Observe o projeto *MetodosEstaticosInstancia* para ver o recurso na prática.
 
+Às vezes, o requisito de que você especifique o número exato de argumentos para o método é restritivo. Usando a 
+palavra chave `params` você indica que um parâmetro é uma matriz de parâmetros, isso permite que o método seja 
+chamado com um número variável de argumentos.  O parâmetro marcado com `params` deve ser um tipo de matriz e deve
+ser o último parâmetro na lista de parâmetros.
+
 #### Métodos virtuais e métodos abstratos
 
 Quando uma classe base declara um método como virtual, uma classe derivada **PODE** substituir o método por sua 
@@ -249,6 +254,9 @@ existente sem que seja necessário modificar, recompilar ou criar uma nova class
 Apesar de serem estáticos, métodos de extensão são chamados como se fossem métodos de uma instância do tipo 
 estendido.
 
+O método de extensão também não precisa residir no mesmo assembly do tipo que ele estende, um exemplo claro disse
+são os métodos de extensão dos providers do Entity Framework Core que são "instalados" via pacotes Nuget.
+
 A implementação de um método de extensão se dá da seguinte forma: um método estático onde seu primeiro parâmetro
 especifica o tipo a ser extendido precedido do modificador `this`: 
 
@@ -272,7 +280,7 @@ próprios.
 ### Construtores
 
 Construtores são métodos chamados automaticamente quando o objeto é criado/instanciado pela primeira vez. 
-Geralmente, eles são usados para inicializar os dados de um objeto.
+Geralmente, eles são usados para inicializar os membros de dados de um objeto.
 
 Um construtor é declarado como um método sem nenhum tipo de retorno e o mesmo nome da classe que o contém.
 
@@ -283,9 +291,61 @@ O C# dá suporte aos construtores estáticos e de instância.
 Um construtor de instância é um membro que implementa as ações necessárias para inicializar uma instância de uma
 classe. 
 
-Um construtor estático é um membro que implementa as ações necessárias para inicializar uma classe quando ele for 
-carregado pela primeira vez. Esse construtor é chamado uma vez, automaticamente, antes de uma instância da classe
-ser criada ou algum de seus membros referenciado.
+Um construtor estático é um membro que inicializa membros estáticos do tipo e implementa as ações necessárias 
+para inicializar uma classe estática. Ele é chamado uma vez, automaticamente, antes da primeira instância da 
+classe ser criada ou algum de seus membros referenciados, assim um construtor estático pode ser usado para 
+executar uma ação específica que precisa ser realizada apenas uma vez. Não tem modificadores de acesso, não 
+possui parâmetros e não pode ser chamado diretamente. O usuário não tem controle sobre quando o construtor 
+estático será executado no programa.
+
+Um construtor de uma classe derivada pode usar a palavra-chave `base` para chamar o construtor de sua classe base:
+
+Um uso típico de construtores estáticos é quando a classe está usando um arquivo de log e o construtor é usado 
+para gravar entradas nesse arquivo.
+
+```
+public class Manager : Employee
+{
+    public Manager(int annualSalary)
+        : base(annualSalary)
+    {
+        //Add further instructions here.
+    }
+}
+```
+
+Neste exemplo, o construtor da classe base é chamado antes de o bloco do construtor ser executado. A palavra 
+chave `base` pode ser usada com ou sem parâmetros. Os parâmetros para o construtor podem ser usados como 
+parâmetros para o construtor base ou como parte de uma expressão.
+
+Em uma classe derivada, se um construtor de classe base não for chamado explicitamente usando a palavra chave 
+base, o construtor padrão, se houver, será chamado implicitamente. Se uma classe base não oferecer um construtor
+padrão, a classe derivada deverá fazer uma chamada explícita para um construtor base usando `base`
+
+Um construtor pode invocar outro construtor no mesmo objeto usando a palavra-chave this.
+
+Como `base`, `this` pode ser usado com ou sem parâmetros e todos os parâmetros no construtor estão disponíveis 
+como parâmetros para `this` ou como parte de uma expressão: 
+
+```
+public class Employee
+{
+    public int salary;
+
+    public Employee(int annualSalary)
+    {
+        salary = annualSalary;
+    }
+
+    public Employee(int weeklySalary, int numberOfWeeks) : 
+		: this(weeklySalary * numberOfWeeks)
+    {
+        /*
+			Algum codigo aqui
+		*/
+    }
+}
+```
 
 ### Eventos
 
@@ -345,6 +405,51 @@ construtor estático seja chamado.
 
 >Dois usos comuns dos campos estáticos são manter uma contagem do número de objetos que foram instanciados ou 
 >armazenar um valor que deve ser compartilhado entre todas as instâncias.
+
+### Classes parciais
+
+Há várias situações em que a divisão de uma definição de classe é desejável:
+
+- Ao trabalhar em projetos grandes, dividir uma classe em arquivos separados permite que vários programadores 
+trabalhem ao mesmo tempo.
+
+- Ao trabalhar com código-fonte gerado automaticamente, o código pode ser adicionado à classe sem precisar 
+recriar o arquivo de origem. O Visual Studio usa essa abordagem quando cria Windows Forms, código de wrapper de 
+serviço Web e assim por diante. Você pode criar código que usa essas classes sem precisar modificar o arquivo que
+o Visual Studio cria.
+
+#### Métodos parciais
+
+Uma classe ou struct parcial pode conter um método parcial. Uma parte da classe contém a assinatura do método. 
+Uma implementação opcional pode ser definida na mesma parte ou em outra parte. Se a implementação não for 
+fornecida, o método e todas as chamadas para o método serão removidos em tempo de compilação. Métodos parciais 
+permitem que o implementador de uma parte de uma classe defina um método, semelhante a um evento. O implementador
+da outra parte da classe pode decidir implementará o método ou não.
+
+Métodos parciais são especialmente úteis como uma maneira de personalizar o código gerado. Eles permitem que um 
+nome e uma assinatura de método sejam reservados, para que o código gerado possa chamar o método, mas o 
+desenvolvedor possa decidir se deve implementar o método.
+
+Uma declaração de método parcial consiste em duas partes: a definição e a implementação. Elas podem estar em 
+partes separadas de uma classe parcial ou na mesma parte. 
+
+```
+// Definição da assinatura em arquivo1.cs  
+partial void onNameChanged();  
+
+// Implementação no arquivo2.cs  
+partial void onNameChanged()  
+{  
+  // method body  
+}
+```
+
+Algumas regras para métodos parciais:
+
+- Declarações de métodos parcial devem começar com a palavra chave `partial` e o método deve retornar `void`;
+- Podem ter os parâmetros `in` ou `ref`, mas não `out`;
+- São implicitamente private e portanto não podem ser `virtual`;
+
 
 ### Parâmetros de tipo
 
@@ -509,10 +614,19 @@ O código acima define um enumerador que possui o seu tipo subjacente `sbyte`
 
 Os tipos de valor anulável também não precisam ser declarados antes de serem usados.
 
-### Tipos anônimos
+### Tipos/Objetos anônimos
 
 Em alguns casos, é inconveniente criar uma classe para conjuntos simples de valores que você não pretende 
 armazenar ou transmitir fora dos limites de método. Você pode criar *tipos anônimos* para isso.
+
+Os tipos anônimos fornecem um modo conveniente de encapsular um conjunto de propriedades somente leitura em um 
+único objeto sem a necessidade de primeiro definir explicitamente um tipo. O nome do tipo é gerado pelo 
+compilador e não está disponível no nível do código-fonte. O tipo de cada propriedade é inferido pelo compilador.
+
+Crie tipos anônimos, usando o operador `new` com um inicializador de objeto: 
+
+`var v = new { Amount = 108, Message = "Hello" }; `
+
 
 ### Tipo dinâmico
 
@@ -524,7 +638,46 @@ Assim como `null`, a maior parte de operações que usam dynamic retornam dynami
 ### Tuplas
 
 É comum querer retornar mais de um valor de um método. Você pode criar tipos de tupla que retornam vários valores
-em uma única chamada de método.
+em uma única chamada de método: métodos retornam um único objeto. Tuplas permitem que você empacote vários 
+valores nesse único objeto mais facilmente.
+
+```
+//Implementação de um método que retorna tupla
+public (string, string, string, int) GetPersonalInfo(string id)
+{
+    PersonInfo per = PersonInfo.RetrieveInfoById(id);
+    if (per != null)
+       return (per.FirstName, per.MiddleName, per.LastName, per.Age);
+    else
+       return null;
+}
+
+//Consumindo o retorno do método acima
+var person = GetPersonalInfo("111111111")
+
+if (person != null)
+   Console.WriteLine("{person.Item1} {person.Item3}: age = {person.Item4}");
+```
+
+É possível nomear os elementos de uma tupla como no exemplo a seguir:
+
+```
+public (string FName, string MName, string LName, int Age) GetPersonalInfo(string id)
+{
+    PersonInfo per = PersonInfo.RetrieveInfoById(id);
+    if (per != null)
+       return (per.FirstName, per.MiddleName, per.LastName, per.Age);
+    else
+       return null;
+}
+
+...
+
+var person = GetPersonalInfo("111111111");
+
+if (person != null)
+   Console.WriteLine("{person.FName} {person.LName}: age = {person.Age}");
+```
 
 ## Adição de dependências em projetos/assemblies distintos
 
