@@ -801,3 +801,9 @@ Você pode imaginar que esse método retorna quando atinge um `await`, porém a 
 não foi concluído, que ainda está em andamento. O método será retomado quando a tarefa em espera for concluída. 
 Após a execução completa, a task retornada indicará a conclusão.
 
+# Generics 
+
+Genéricos trazem o conceito de parâmetros de tipo, que possibilitam a criação de classes e métodos que adiam a 
+especificação de um ou mais tipos até que a classe ou método seja declarado e instanciado pelo código do cliente.
+
+O uso mais comum de genéricos é para criar classes de coleção.
